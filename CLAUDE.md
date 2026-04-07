@@ -40,7 +40,7 @@ React SPA (5173) ──Axios──▶ Spring Boot API (8081) ──▶ MongoDB (
 
 - **controller/**: REST endpoints — `FieldMongoController` (`/mongo/field`), `UserController` (`/api/auth`), `SensorValueController` (`/api/sensor-values`)
 - **service/**: Business logic — `FieldMongoService`, `MqttWeatherService` (MQTT subscriber + NASA fallback), `SensorValueService`
-- **entity/**: MongoDB document models — `Field`, `User`, `FieldSensor`, `SensorValue`
+- **entity/**: MongoDB document models — `Field` (with `Field(String name)` default constructor for fieldTest init), `User`, `FieldSensor`, `SensorValue`; legacy Firebase entities also in `entity/` (non-Mongo)
 - **repositories/**: Spring Data MongoDB repos
 - **Jwt/**: `JwtUtils` (token gen/validation), `JwtAuthFilter` (request filter)
 - **config/**: `SecurityConfig` (CORS + auth rules), `WebConfig`
@@ -69,6 +69,19 @@ MQTT broker (HiveMQ `broker.hivemq.com:1883`) → topic `/sensor/weatherStation`
 - **Firebase**: Service account key expected at `serviceAccountKey.json` (path configured in `FirebaseInitializer`)
 - **MQTT**: HiveMQ public broker
 - **APIs**: NASA Power (no key), OpenWeather (key in `MqttWeatherService`)
+
+### MongoDB Field Entity (`entity/MongoEntity/Field.java`)
+
+The MongoDB `Field` entity stores all customized parameters as flat individual fields (acreage, fieldCapacity, distanceBetweenRow, distanceBetweenHole, dripRate, autoIrrigation, numberOfHoles, fertilizationLevel, irrigationDuration, scaleRain) rather than a nested `CustomizedParameters` object. This differs from the legacy Firebase `Field` entity which uses `CustomizedParameters customized_parameters`.
+
+- `Field(String name)` constructor initializes all flat fields with defaults matching the Firebase `CustomizedParameters(name)` defaults (acreage=50, fieldCapacity=60, dripRate=1.6, etc.)
+- `Field(String id, double acreage, ...)` full constructor for explicit values
+- `Field()` no-arg constructor for MongoDB/Jackson deserialization
+
+## Git Remote
+
+- **Repository**: `git@github.com:trieu-1802/IOT_Agriculture.git`
+- **Branch**: `master`
 
 ## Conventions
 
