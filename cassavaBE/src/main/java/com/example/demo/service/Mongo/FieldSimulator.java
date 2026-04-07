@@ -58,6 +58,8 @@ public class FieldSimulator {
             return Collections.emptyList();
         }
 
+        simulationResultRepository.deleteByFieldId(fieldId);
+
         List<FieldSimulationResult> toSave = new ArrayList<>();
 
         for (int i = 1; i < results.get(0).size(); i++) {
